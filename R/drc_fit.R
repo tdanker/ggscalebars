@@ -16,7 +16,7 @@
 #'
 #' @export
 drc_fit<-function(df, params=2, add_confidence=FALSE){
-  #library(broom)
+
   df <- dplyr::ungroup(df)
   names(df)[1:3]<-c("response", "concentration", "compound")
 

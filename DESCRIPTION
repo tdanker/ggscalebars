@@ -17,18 +17,13 @@ Imports:
     lubridate,
     xml2,
     XML,
-    lemon,
-    gridBase,
     readr,
     assertthat,
-    broom,
     drc,
     modelr,
     signal,
     tibble,
     glue, 
-    gtable, 
-    memoise,
     units,
     lifecycle
 Suggests:
