@@ -1,0 +1,42 @@
+---
+title: "expfit"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{expfit}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, echo=FALSE}
+suppressMessages(library(ephys4))
+```
+
+
+```{r}
+read_PATCHMASTER(ephysdata::examplefile("NaV"), ser=2) %>% tail(1) -> testdata
+
+testdata %>% ggsweeps()
+```
+
+
+```{r}
+
+
+testdata %>%
+ add_cursor_expfit("expfit", 0.011, 0.03, annot=annot_range_model(range.color="skyblue", range.fill=alpha("skyblue", .1), line.color = "blue", line.width = 2)) -> EXPFIT
+
+EXPFIT%>% ggsweeps() + cowplot::theme_cowplot()
+
+```
+
+```{r}
+EXPFIT %>% select(expfit) %>% tidyr::unnest_wider(expfit, names_sep = "~")
+```
+

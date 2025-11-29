@@ -1,0 +1,56 @@
+home:
+  strip_header: true
+  links:
+  - text: All Packages
+    href: ../../index.html
+
+figures:
+  dev: ragg::agg_png
+  dpi: 200
+  dev.args: []
+  fig.ext: png
+  fig.width: 7.2916667
+  fig.height: ~
+  fig.retina: 2
+  fig.asp: 0.618
+  bg: NA
+
+navbar:
+  components:
+     repo_home:
+       icon: "fas fa-warehouse fa-lg"
+       text: "All Packages"
+       href: ../../index.html
+
+  structure:
+    left:  [home, intro, reference, articles, tutorials, news, repo_home]
+
+
+reference:
+- subtitle: Read 
+  desc: reading raw data files
+  contents:
+  - starts_with("read")
+  
+
+  
+- subtitle: Analyse
+  desc: add cursors that perform analysis on your data
+  contents:
+  - contains("cursor")
+  
+- subtitle: Plot
+  desc: make ggPlots of your data
+  contents:
+  - starts_with("gg")   
+  
+- subtitle: Drc
+  desc: doing dose response analysis
+  contents:
+  - starts_with("drc")
+
+- subtitle: Misc
+  desc: doing dose response analysis
+  contents:
+  - starts_with("*")
+

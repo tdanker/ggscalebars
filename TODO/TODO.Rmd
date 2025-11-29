@@ -1,0 +1,163 @@
+---
+title: "TODO"
+output: html_notebook
+---
+# Errors
+[ ] readme-more hat einige nicht funktionierende chunks
+
+# Allgemeines
+swp ist zwar gut dass es ein faktor ist, aber wenn über 9 dann kommt die Reihenfolge durcheinander. Also muss es ein besserer Faktor werden!
+
+stimulus Name fehlt noch
+
+asserthat Fehlermedungen einbauen wo es nur geht damit es Robust wird
+
+## Einheitliche Standard-Columns für alle Platformen
+ - gibt es id und seconds auch bei allen? 
+ - sollte seconds nicht sweepstart oder so heissen? 
+
+# Filter
+
+Gut wäre eine comumn .filter, die, wenn vorhanden, von ggsweeps und den cursor verwendet wird. Dazu ein add_filter() 
+
+vielleicht doch filter.start und filter.end festlegen, so dass wir mit kleineren Stücken von Traces arbeiten können
+
+- filter und {{filter}} für alle Plattformen und cursor testen
+  - [x] alle platformen können ggsweeps mit filter
+  - [ ] klappt das auch mit {{filter}} ?
+- cursor point_ kann mit filtern umgehen, auch in der Form {{filter}}. 
+  - [x] Die anderen können das noch nicht.
+
+# DRC 
+...?
+
+# Roboocyte
+
+## compound info:
+mindestens eins von: 
+ - "export_datatable" exportieren und einlesen
+ - wissen welche .r2vc Datei verwendet wurde und die einlesen
+ - auf die Datenbank zugreifen (solange sie da ist) (+)
+ - aus den logdateien nehmen
+
+Die Strategie Datenbank-Zugriff==>substanztabelle generieren lässt sich im Rahmen des commit-scripts automatisieren, das wäre eine gute Sache. 
+aber das ist evtl etwas entgegen das "die Mitarbeiter können alles selbst" Prinzip. 
+
+## recinfo, RNAinfo needs ephys3 and is slow (solved?) - hier gibt gerade mehrere Lösungen? 
+```{r}
+# With all RNA and other cool info
+get_recordinginfos(ephysdata::examplefile("OO_rpf")) %>% left_join(read_ROBOO(ephysdata::examplefile("OO_r2d")) ) %>% head(6) ->DATA 
+
+DATA %>% tidyr::unnest(Recinfo) %>% 
+ ggsweeps(mapping=aes(x,y,color=rcinfo.Valve)) + facet_wrap(~WellID)
+```
+
+# caching and memoisation:
+https://stackoverflow.com/questions/7262485/options-for-caching-memoization-hashing-in-r
+
+
+# XBARS, scalbears, & facests
+Beispiele: LABWORK_taumann Histamin2021, TRPA1
+  - Wie verhalten sich die Scalebars dabei? 
+
+# Möglichkeit, mehrere sweeps nebeneinander auf eine facet abzubilden
+- wie gehen die cursor x-Werte da mit?
+
+# Möglichkeiten zum automatischen Freigeben von etwas "Headspace" über den Daten für xBars: (make vignette)
+
+- einen unsichtbaren pixel setzen
+  - Vorteil: kann von ylim jederzeit übergangen werden. geom_blank scheint dafür gemacht zu sein.
+
+- expand_scale
+
+# CMD CHECK 3 WARNINGS
+
+## checking for missing documentation entries ... WARNING
+
+Undokumentierte Code-Objekte:
+  'annotate_valves' 'get_recordinginfos' 'logs_add_app.n'
+  'logs_per_sweep' 'unfiltered'
+All user-level objects in a package should have documentation entries.
+
+## checking Rd \usage sections ... WARNING
+
+
+Undocumented arguments in Rd file 'add_bar.Rd'
+  'bar.mapping'
+
+Undocumented arguments in Rd file 'add_cursor.Rd'
+  'annot_under' 'filter_fun' 'filter_fun2' 'df'
+Documented arguments not in \usage in Rd file 'add_cursor.Rd':
+  'filter'
+
+Undocumented arguments in Rd file 'check_out.Rd'
+  '.' 'to_file' '...'
+
+Undocumented arguments in Rd file 'colorize_word.Rd'
+  'text' 'word' 'color'
+
+Undocumented arguments in Rd file 'coord_scalebars.Rd'
+  'expand.x' 'expand.y' 'top' 'left' 'bottom' 'right' 'gap'
+
+Undocumented arguments in Rd file 'cursorannotations.Rd'
+  'range.color' 'point.color' 'point.shape' 'point.fill' 'point.size'
+  'point.stroke' 'name' 'fill' 'col' 'linetype' '...' 'filter'
+  'toplevel' 'x1' 'x2' 'color'
+
+Undocumented arguments in Rd file 'cursors.Rd'
+  'annot' '...' 'line' 'fixed.y' 'sweeps' 'label' 'bar.mapping' 'fill'
+  'border' 'label.col' 'label.size' 'hjust' 'vjust' 'label.x'
+  'label.sweeps' 'direction' 'min_chunksamples' 'start_plus'
+  'end_minus'
+
+Undocumented arguments in Rd file 'drc_plot.Rd'
+  'point.size' 'line.size' 'bar.size' 'show_IC50' 'legend.labels'
+  'drop_conc0' 'colors'
+
+Undocumented arguments in Rd file 'geom_topbar.Rd'
+  'label' 'line_to.x' 'line_to.x2' 'line_to.y' 'line_to.y2'
+  'line_to.color' 'line_to.size' 'line_to.linetype' 'line_to.arrow'
+  'label.x' 'label.y' 'label.position' 'fill' 'border' 'label.col'
+  'label.size' 'get_data' 'hjust' 'vjust' '...'
+
+Undocumented arguments in Rd file 'geom_topbar_.Rd'
+  'label' 'line_to.x' 'line_to.x2' 'line_to.y' 'line_to.y2'
+  'line_to.color' 'line_to.size' 'line_to.linetype' 'line_to.arrow'
+  'label.x' 'label.y' 'label.position' 'fill' 'border' 'label.col'
+  'label.size' 'get_data' 'hjust' 'vjust' '...'
+
+Undocumented arguments in Rd file 'geom_trace.Rd'
+  'filter_fun2'
+
+Undocumented arguments in Rd file 'get_logs_per_run.Rd'
+  'plate'
+
+Undocumented arguments in Rd file 'get_oo_log_runs_df.Rd'
+  'Plate' 'from' 'to' 'runs'
+
+Undocumented arguments in Rd file 'get_trace.Rd'
+  'force_read' 'unnest.data' 'name' 'rerun' '...'
+
+Undocumented arguments in Rd file 'ggsweeps.Rd'
+  'filter_fun' 'filter_fun2' 'maxpoints' 'style' 'bottomspace'
+  'topspace' 'height' 'space' 'bar.colors' 'axis.bottom.style'
+  'axis.left.style' 'xoffset' 'yoffset'
+
+Undocumented arguments in Rd file 'logs_show.Rd'
+  'Plate' 'from' 'to'
+
+Undocumented arguments in Rd file 'read_PATCHMASTER.Rd'
+  'cache_rerun' 'step_out' 'prefilter_exp_ser'
+
+Undocumented arguments in Rd file 'scalebars.Rd'
+  'expand.x' 'expand.y' 'top' 'left' 'bottom' 'right' 'gap'
+
+Undocumented arguments in Rd file 'xtract_pattern.Rd'
+  'loglines' 'p' 'which'
+  
+  
+## besselfilter raw data  
+Found the following non-empty subdirectories of 'inst' also used by R:
+  inst/data
+  
+

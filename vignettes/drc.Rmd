@@ -1,0 +1,93 @@
+---
+title: "Dose resoponse curves"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Dose resoponse curves}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+```{r setup, include=FALSE}
+library(ephys4)
+```
+
+```{r}
+drc_fit_ <-function(ephysdata, col,  normalize=T, params=2){
+  drc_get_lpresults_(ephysdata, {{col}}, normalize) %>% drc_fit(params)
+}
+```
+
+
+```{r}
+#using set_drc_sweeps:
+read_PATCHMASTER(ephysdata::examplefile("hergDRC"),2) %>% 
+  add_cursor_point("peak", 2.28,2.3,max) %>%         # --> ggsweeps
+  drc_plan_HEKA(3)  %>%                              # --> ggsweeps_drc , i/t plot 
+  drc_fit_(peak) %>%                                 # --> drc_table
+  drc_plot                                           # ==> PLOT
+```
+
+```{r}
+# step by step:
+herg_sweeps <-  
+ read_PATCHMASTER(ephysdata::examplefile("hergDRC"),2) %>% 
+  add_cursor_point("peak", 2.28,2.3,max) 
+
+   herg_sweeps %>% 
+     ggsweeps()
+
+drc_sweeps <- 
+  herg_sweeps %>% drc_plan_HEKA(3)  
+ 
+    drc_sweeps %>% 
+      filter(drc_sweep)  %>% 
+      ggsweeps(mapping=aes(color=factor(conc)))
+
+drc_fitresults <- 
+  drc_sweeps %>% drc_fit_(peak) 
+
+    drc_fitresults %>% drc_table()
+      
+    drc_fitresults %>%               
+      drc_plot 
+```
+
+
+
+```{r}
+HERG23<-
+ read_PATCHMASTER(ephysdata::examplefile("hergDRC"),2:3) %>%
+ add_cursor_point("peak", 2.28,2.3,max) %>% 
+  add_cursor_level("base", 0,.1,mean) %>% 
+  mutate(peak2=peak-base)  %>% 
+  drc_plan_HEKA(3)  
+
+# sweeps plot, only "lp sweeps"
+HERG23 %>% 
+  filter(drc_sweep) %>% 
+  ggsweeps(mapping=aes(color=factor(conc))) + facet_wrap(~exp)
+
+
+
+# I/t plot, normalized
+HERG23  %>% 
+  group_by(file, exp, ser) %>%
+  mutate(minutes=(swp.start-swp.start[1])/60) %>% 
+  mutate(peak2=peak2/peak2[1]) %>%
+  ggplot(aes(x=minutes, y=peak2, color=factor(conc), group=factor(exp), shape=factor(exp))) + 
+  geom_segment(
+    aes(x,y,xend=xend,yend=y ),
+    data= . %>% filter(drc_sweep) %>% group_by(file, exp, ser, conc) %>% mutate(x=min(minutes), xend=max(minutes), y=mean(peak2)), 
+    size=1) + 
+  geom_point() + geom_line() + 
+  geom_point(data=. %>% filter(drc_sweep), size=3)
+
+# drc plot
+HERG23  %>%
+ drc_get_lpresults_(peak2, normalize = TRUE) %>% 
+ drc_fit %>%  
+ drc_plot
+
+```
+

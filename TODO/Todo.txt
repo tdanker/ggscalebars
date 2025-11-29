@@ -1,0 +1,44 @@
+FIND FILES
+- store absolute path in ptrs
+	- or maybe relative to project root
+
+- have a utility function to change the path in ptrs
+	- maybe can take a list of changed paths?
+
+- find-file sould be work in get_trace, so that we can use this to fix things, too
+	- when not found, we could take the leafname and search for it in the search-folders (optional)
+	- or also works through al list of changed paths (more save)
+	- warns if more than one file is found
+	- maybe warns if this does not seem to be the right file 
+		(i.e. different experiment from same day, other setup)
+
+FILTER
+-   filter column, ggsweeps and cursors use it as a default?
+-   filter instead on (nested) data column, we can have different ***datastreams*** here,
+	cursors, further filters, and ggsweeps can than use this stream, 
+	this all results in "baked" filtered data and ggplots. 
+	BUT, for cursors we sometimes would only load part of the trace, and ggsweeps might need to 
+		expand it and therefore apply the filter again. Sometimes this will be done only for a few 
+		sweeps, depending on the cursor results. so we need the filter information of the first 
+		stream to be able to expand it. This would be elegant 
+		(but beware of filters behaving different at start or end region).   
+		
+	(Einiges umgesetzt, Doku!)
+	Filter_fun2 kann jetzt auf die ganze Reihe zugreifen, Beispiel in subtract_traces.Rmd!!
+	Es gibt einen weg, ein ganzes Experiment zu filtern, stichwort xoffset="realtime", Beispiel in Aptynix/Glu_drc.RMD!
+	
+	
+MAXPOINTS vs DOWNSAMPLING
+- implement minmax
+- implement lowess?
+- implement bessel functions with x-shift?
+- implement downsampling filters  <== this would go well with the datastreams aproach above
+
+
+
+Rbind, Bind_rows and Cursor annots?
+- where, when and why do we loose the annots?
+- would it be better to have the annots in a column rather than as an attribute?
+	? performance, memory, disc space?
+	! we could set annots per sweep, which is nice!
+

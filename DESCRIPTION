@@ -1,0 +1,49 @@
+Package: ephys4
+Type: Package
+Title: Read, analyze and plot HEKA Patchmaster files
+Version: 4.0.0
+Date: 2022-09-29
+Author: Timm Danker
+Maintainer: Timm Danker <timm.danker@nmi.de>
+Description: Patchmaster raw data files can be read directly and visualized using ggplot.  
+ The package also allows for setting of so called 'cursors', 
+ which are user defined regions of interest on which calculations are performed. 
+License: GPL
+Imports:
+    tidyr,
+    purrr,
+    stringr,
+    rlang,
+    lubridate,
+    xml2,
+    XML,
+    lemon,
+    gridBase,
+    readr,
+    assertthat,
+    broom,
+    drc,
+    modelr,
+    signal,
+    tibble,
+    glue, 
+    gtable, 
+    memoise,
+    units,
+    lifecycle
+Suggests:
+    knitr,
+    testthat (>= 3.0.0),
+    rmarkdown,
+    ephysdata, 
+    patchwork,
+    cowplot, 
+    devtools,
+    fs,
+    vdiffr
+Depends: R (>= 4.2), dplyr, ggplot2 (>= 3.5.1)
+VignetteBuilder: knitr
+RoxygenNote: 7.3.3
+Encoding: UTF-8
+Config/testthat/edition: 3
+Roxygen: list(markdown = TRUE)

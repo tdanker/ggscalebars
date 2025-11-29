@@ -1,0 +1,166 @@
+---
+title: "ephys4"
+output: github_document
+---
+# ephys4 <img src="man/figures/logo.png" align="right" />
+## Read, plot and analyse ephys data
+
+<!-- badges: start -->
+[![Lifecycle: stable](https://img.shields.io/badge//lifecycle-stable-green.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
+
+<!-- badges: end -->
+
+The ephys4 package unifies reading HEKA, Roboocyte, and Hamamatsu files and performs analyses on them.  
+
+```{r setup, message=FALSE, include=FALSE}
+lifecycle::badge("stable")
+devtools::load_all()
+
+theme_set(theme_classic())
+
+knitr::opts_chunk$set(
+  fig.path = "man/figures/", 
+  fig.width = 9
+)
+
+options(data_files_path = ephysdata::get_examples_path())
+library(patchwork)
+```
+
+### Package Installation
+If your system is [setup to use this repository](../repo_setup.html), you can install the package simply by typing:
+```{r install_tip, eval=FALSE}
+install.packages("ephys4")
+```
+
+
+
+```{r readme_plot}
+# read and plot HEKA patch-clamp file
+HEKA <- (
+  read_PATCHMASTER("VG_Blocker.dat", exp = 1, ser = 2) %>% filter(swp==6) %>%
+            add_cursor_point(name = "peak", start=.01,end=.012, fun = min) -> HEKA_results ) %>%
+            ggsweeps() + 
+            ggtitle("HEKA", subtitle = "Sodium Channel")
+
+# read and plot HAMAMATSU file
+HAMA <- (
+  
+  read_HAMAMATSU("HAMAMATSU/cardiomyocytes.TXT") %>%  filter(well=="A2") %>% 
+            add_cursor_points("peak",start=20,end=40, fun = max)     -> HAMA_results) %>%
+  
+            ggsweeps() + 
+            ggtitle("HAMAMTSU", subtitle = "Cardiomyocytes")
+
+# read, analyse, and plot Roboocyte file
+ROBO <- (read_ROBOO("roboocyte/0626.1.r2d") %>%  head(1) %>%  
+           add_cursor_point(name = "peak", start=39, end=119, fun = min)-> ROBO_results) %>% 
+           ggsweeps() + 
+           ggtitle("ROBOCYTE", subtitle = "GABA-A")
+
+# show all 3 plots
+HEKA + ROBO / HAMA 
+```
+
+
+
+```{r drc, echo=FALSE, warning=FALSE, fig.width=12, fig.height=8}
+# complete hERG DRC analysis example
+
+# custom cursor annotation for this plot
+halodots <- function(name){
+  list(
+    geom_cursor_point_(name, fill = alpha("grey50", .15), color="transparent", size=4, shape=21), 
+    geom_cursor_point_(name, col = "darkred", size=.7)  
+  )
+}
+
+# colors for this plot
+itc <- c(NMItemplates::NMIblues(3)[3], shades::lightness("darkred", 1+(5:0)*15))# ; shades::swatch(itc)
+itcf <- shades::lightness(itc, shades::delta(20))#; shades::swatch(itcf)
+
+#plot_It function
+plot_It <- function(ephysdata){
+  ephysdata %>% 
+    ggplot(aes(x=minutes, y=peak2, color=factor(conc), fill=factor(conc), group=factor(exp), shape=factor(exp))) + 
+  #  geom_rect( aes(xmin=x,ymin=-Inf,xmax=xend,ymax=Inf ),
+  #   data= . %>%  group_by(file, exp, ser, conc) %>% mutate(x=min(minutes)-diff(range(minutes[1:2])), xend=max(minutes), y=mean(peak2)), 
+  #   size=.5, alpha=0.0, color=NA)+
+  # geom_rect( aes(xmin=x,ymin=-Inf,xmax=xend,ymax=Inf ),
+  #   data= . %>% filter(drc_sweep) %>% group_by(file, exp, ser, conc) %>% mutate(x=min(minutes), xend=max(minutes), y=mean(peak2)), 
+  #   size=.5, alpha=.00, color=NA)+
+  # geom_rect( aes(xmin=x,ymin=y-.03,xmax=xend,ymax=y+.03 ),
+  #   data= . %>% filter(drc_sweep) %>% group_by(file, exp, ser, conc) %>% mutate(x=min(minutes), xend=max(minutes), y=mean(peak2)), 
+  #   size=.5, alpha=0, color=NA)+
+   geom_rect( aes(xmin=x,ymin=1.15,xmax=xend,ymax=1.2), show.legend = F, 
+    data= . %>%  group_by(file, exp, ser, conc) %>% mutate(x=min(minutes)-diff(range(minutes[1:2])), xend=max(minutes), y=mean(peak2)),
+    size=.5, alpha=1, color=NA)+
+  geom_vline(aes(xintercept=x, col=factor(conc)), linetype=3, data= . %>% group_by(file, exp, ser, conc) %>% mutate(x=min(minutes)-diff(range(minutes[1:2]))), show.legend = F) +
+  geom_vline(aes(xintercept=x, col=factor(conc)), linetype=3, data= . %>% group_by(file, exp, ser, conc) %>% mutate(x=max(minutes)) %>% tail(1), show.legend = F) +
+  geom_segment( aes(x,y,xend=xend,yend=y ),
+    data= . %>% filter(drc_sweep) %>% group_by(file, exp, ser, conc) %>% mutate(x=min(minutes), xend=max(minutes), y=mean(peak2)), 
+    size=1.5) + 
+  geom_text(aes(x, y=1.18, label=conc), data= . %>% group_by(file, exp, ser, conc) %>% mutate(x=mean(minutes) ) %>% slice(1) %>% tail(6), color="black", show.legend=F)+
+  geom_point(alpha=.3) + geom_line(alpha=.6) +   
+  geom_point(data=. %>% filter(drc_sweep), size=2, alpha=.5) + theme_classic() + 
+  scale_fill_manual(values=itcf) + 
+  scale_color_manual(values=itc) + scale_y_continuous(limits = c(0,1.21), expand = c(0,0), breaks=pretty(c(0,1.2))) + 
+  lemon::coord_capped_cart(left="both", bottom="none", gap=0, expand = F) + 
+ 
+  theme(    axis.title.y = element_blank()) + 
+  theme(legend.position = "none") 
+}
+
+
+# read the experiment data
+HERG23<-
+ read_PATCHMASTER(ephysdata::examplefile("hergDRC"),2:3) %>%
+ add_cursor_point("peak", 2.28, 2.4, max,  annot=halodots ) %>% 
+  add_cursor_level("base", .05, .15, mean, annot=geom_cursor_hline_) %>% 
+  mutate(peak2=peak-base)  %>% 
+  drc_plan_HEKA(3)
+
+# sweeps plot, only "lp sweeps"
+HERG23 %>% filter(exp==2) %>% 
+  filter(drc_sweep) %>% 
+  ggsweeps(mapping=aes(color=factor(conc))) + 
+  scale_color_manual(values = itc) + 
+  theme_classic() + 
+  theme(legend.position = "none") +
+  ggtitle("", subtitle = "sweeps plot") + 
+  theme(plot.title = element_blank()) + 
+  ylim(NA, 4.3)-> sweeps
+
+
+# I/t plot, normalized to first lp result
+HERG23  %>% filter(exp==2) %>%
+  group_by(drc_id) %>%
+  mutate(minutes=(swp.start-swp.start[1])/60) %>% 
+  mutate(peak2=peak2/peak2[13]) %>%
+  plot_It  + ggtitle("", subtitle = "Normalized I/t plot")+ theme(plot.title = element_blank())-> It
+  
+# drc plot
+HERG23  %>% filter(exp==2) %>%
+ drc_get_lpresults_(peak2, normalize = TRUE) %>% 
+ drc_fit %>%  
+ drc_plot(xlimits = c(0.003, 1000)) + theme_classic() +theme(axis.title.y = element_blank())+ 
+  scale_y_continuous(limits = c(0,1.21), expand = c(0,0), breaks=pretty(c(0,1))) +
+  theme(legend.position = "none") +
+  ggtitle("", subtitle = "Fitted dose-response curve") + 
+  lemon::coord_capped_cart(left="none") + scale_color_manual(values = itc[5]) + theme(plot.title = element_blank()) + 
+  xlab("concentration [µM]")-> drc  
+
+
+(sweeps + drc) / It + 
+  plot_annotation("hERG block by Quinidine: a manual patch clamp study", 
+                  caption="hERG expressing CHO cells where manually patched clamped by our team in Reutlingen using the Dynaflow technology", 
+                  theme = theme(plot.title = element_text(colour =NMItemplates::NMIblues(3)[1], size = 18))) & 
+  theme(plot.subtitle = element_text(color="grey60", size=9), 
+        axis.title.x = element_text(color="grey60", size=8), 
+        axis.line = element_line(color="grey60"), 
+        plot.caption = element_text(color=NMItemplates::NMIblues(3)[1], size=8))
+```
+
+
+
+

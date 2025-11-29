@@ -1,0 +1,127 @@
+---
+title: "TODO"
+output: html_notebook
+---
+
+# DRINGED!
+
+[x]( ***test on all platforms*** ) swp ist zwar gut dass es ein faktor ist, 
+   aber wenn über 9 dann kommt die Reihenfolge durcheinander. Also muss es ein besserer Faktor werden!
+   (habe alle swp und wellID in Faktoren basierend auf "numeric" umgewandelt - )
+   
+   
+# Dokumentation
+add to all package docs:
+install.packages("ephys4", repos= c("file:///R://Elektrophysiologie/R_PACKAGES", getOption("repos")))
+   
+# Fit Errors
+
+[x ] wenn ein model_cursor nicht fittet,muss der Fehler abgefangen werden
+[ ] der error sollte in eine warnung umgewandelt werden. ==> ? nls.control, warnOnly
+
+```{r}
+library(ephysdata)
+data.<-
+  read_PATCHMASTER(examplefile("NaV"), ser=2) %>% tail(3)
+
+# ist einfach sehr wackelig. das pass schon so, aber da gibts ab und zu fehler im modell
+
+fail <- data. %>% filter(swp ==10) %>%  
+  add_cursor_model("lm" , 0.001, 0.009, model_fun_exp, st2=0.01, en2=0.031) %>% 
+  ggsweeps# + ggScalebar(" sec", " nA")
+
+fit <- data. %>% filter(swp ==10) %>%  
+  add_cursor_model("lm" , 0.001, 0.0095, model_fun_exp , st2=0.01, en2=0.03) %>% 
+  ggsweeps# + ggScalebar(" sec", " nA")
+library(patchwork)
+fail + fit
+```
+
+
+
+# Allgemeines
+
+[ ]  einige  Fehlermeldungen werden mit stop() generiert. Alle markieren und überarbeiten. 
+
+
+
+stimulus Name fehlt noch
+
+asserthat Fehlermedungen einbauen wo es nur geht damit es Robust wird
+
+## Einheitliche Standard-Columns für alle Platformen
+ - gibt es id und seconds auch bei allen? 
+ - sollte seconds nicht sweepstart oder so heissen? 
+
+# Filter
+[ ] alle add_cursor_xx methoden auf filter parameter überprüfen
+
+[ ] add_filter()
+  Gut wäre eine column .filter, die, wenn vorhanden, von ggsweeps und den cursor verwendet wird.  
+  Die id sollte automatisch angepasst werden, damit das grouping weiterhin klappt. 
+
+[ ] vielleicht doch filter.start und filter.end festlegen, so dass wir mit kleineren Stücken von Traces arbeiten können
+
+- filter und {{filter}} für alle Plattformen und cursor testen
+  - [x] alle platformen können ggsweeps mit filter
+  - [ ] klappt das auch mit {{filter}} ?
+- cursor point_ kann mit filtern umgehen, auch in der Form {{filter}}. 
+  - [x] Die anderen können das noch nicht.
+
+# DRC 
+...?
+
+# Roboocyte
+
+## compound info:
+mindestens eins von: 
+ [x] "export_datatable" exportieren und einlesen
+ - wissen welche .r2vc Datei verwendet wurde und die einlesen
+ - auf die Datenbank zugreifen (solange sie da ist) (+)
+ - aus den logdateien nehmen
+
+Die Strategie Datenbank-Zugriff==>substanztabelle generieren lässt sich im Rahmen des commit-scripts automatisieren, das wäre eine gute Sache. 
+aber das ist evtl etwas entgegen das "die Mitarbeiter können alles selbst" Prinzip. 
+
+
+
+# Performance
+
+## caching and memoisation:
+
+Hier ein paar Tips:
+https://stackoverflow.com/questions/7262485/options-for-caching-memoization-hashing-in-r
+https://joshuacook.netlify.app/post/caching-in-r/
+
+Das einfachste und beste ist, mustashe zu benutzen. 
+
+#### memoise limitations
+- memoise hat Probleme mit rlang, so dass wir es nicht g+r ggsweeps und add_cursor einsetzen können. 
+- für get.ephysdata_using_dataPronoun scheint es zu viel Overhead zu haben, so dass es nichts bringt sondern alles nur noch schlimmer macht. Erstaunlich!
+
+
+#### lazy cursors
+Diese Idee wäre, bei add cursor nur die Definition des Cursors zu hinterlegen und ihn erstmal nicht berechnen zu lassen. 
+Dazu müsste es eine Funktion calculate_cursors geben, die dann bei Bedarf aufgerufen wird. Die kann dann einmalig den trace laden und alle Operationen darauf ausführen, was natürlich viel effizierenter ist.  Aber gar nicht so einfach zu realisieren!
+
+#### store trace data in results tibble:
+Das wäre das einfachste. Werden die dann nicht zu groß? Bei Hamamatzu machen wir das ja so. Es könnte optional sein und man kann sie bei Bedarf wieder löschen. 
+
+
+
+# XBARS, scalbears, & facests
+Beispiele: LABWORK_taumann Histamin2021, TRPA1
+  - Wie verhalten sich die Scalebars dabei? 
+
+## Möglichkeit, mehrere sweeps nebeneinander auf eine facet abzubilden
+- wie gehen die cursor x-Werte da mit?
+
+## Möglichkeiten zum automatischen Freigeben von etwas "Headspace" über den Daten für xBars: (make vignette)
+
+- einen unsichtbaren pixel setzen
+  - Vorteil: kann von ylim jederzeit übergangen werden. geom_blank scheint dafür gemacht zu sein.
+
+- expand_scale
+
+
+

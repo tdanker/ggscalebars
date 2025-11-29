@@ -1,0 +1,17 @@
+.Rproj.user
+.Rhistory
+.RData
+man/*.Rd
+inst/doc
+doc
+Meta
+*_files
+**.html
+docs
+/doc/
+/Meta/
+**/cache_HEKAtraces/*
+**/cache_robotraces/*
+**/cache_patchmaster/*
+**/cache/*
+tests/testthat/Rplots.pdf
