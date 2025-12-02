@@ -22,9 +22,13 @@ make_ephysdata<-function(tidy_ephysdata){
   stopifnot("swp" %in% names(tidy_ephysdata))
   stopifnot("x" %in% names(tidy_ephysdata))
   stopifnot("y" %in% names(tidy_ephysdata))
-
+  
+  
+  tidy_ephysdata <- tidy_ephysdata %>%  group_by(across(c(-x, -y))) 
+  
+  stopifnot( length(unique(tidy_ephysdata$id)) == n_groups(tidy_ephysdata) ) 
+  
   tidy_ephysdata %>% 
-    group_by(across(c(-x, -y))) %>% 
     summarise(data=list(data.frame(x=as.double(x[!is.na(x)]),y=as.double(y[!is.na(y)]))), xoffset=0, yoffset=0, ptrs=list(list(file="x.dat"))) %>% 
     arrange(as.numeric(swp)) %>% 
     mutate(swp=factor(swp, levels=1:max(swp))) %>%
