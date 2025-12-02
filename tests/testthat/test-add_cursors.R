@@ -1,7 +1,14 @@
-test_that("add_cursor_point produces correct resuls", {
+test_that("add_cursor_point produces correct results", {
   read_PATCHMASTER(ephysdata::examplefile("hergDRC"),2) %>% 
     add_cursor_point("peak", 2.28,2.3,max)->cursor_results
-   
+  expect_snapshot_value(cursor_results$id, style = "json2")
+  expect_snapshot_value(cursor_results$peak, style = "json2")
+})
+
+
+test_that("add_cursor_point with condition produces correct results", {
+  read_PATCHMASTER(ephysdata::examplefile("hergDRC"),2) %>% 
+    add_cursor_point("peak", 2.28,2.3,max, condition=swp==5)->cursor_results
   expect_snapshot_value(cursor_results$id, style = "json2")
   expect_snapshot_value(cursor_results$peak, style = "json2")
 })

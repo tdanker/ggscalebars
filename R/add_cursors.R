@@ -20,7 +20,7 @@
 #' @param filter optional: a function that modifies the data 
 #'
 #' @export
-add_cursor<- function(ephysdata, name, start, end, cfun, stream,  annot=attr(cfun, "annot") , annot_under=NULL, 
+add_cursor<- function(ephysdata, name, start, end, cfun, stream,  condition=TRUE, annot=attr(cfun, "annot") , annot_under=NULL, 
                       auto_hoist=tibble::lst(!!name:="y"), .transform=tibble::lst(!!name:=auto_transform), 
                       filter_fun=unfiltered, filter_fun2=unfiltered, ...){
 
@@ -51,6 +51,7 @@ add_cursor<- function(ephysdata, name, start, end, cfun, stream,  annot=attr(cfu
           get_defaultstream(data , yoffset, {{start}}, {{end}}, filter_fun=filter_fun, filter_fun2=filter_fun2),
           start={{start}},
           end={{end}}, 
+          condition={{condition}},
           annot=annot,
           ...) ),
         .after=id
@@ -65,6 +66,7 @@ add_cursor<- function(ephysdata, name, start, end, cfun, stream,  annot=attr(cfu
           {{stream}} %>% filter(x %>% between({{start}}, {{end}})), 
           start={{start}}, 
           end={{end}}, 
+          condition={{condition}},
           annot=annot,
           ...) ),
         .after=id
@@ -121,9 +123,9 @@ add_cursor_point_fast<-function(df, name, start, end, fun, annot=NA){
 #'add_cursor_point(name = "peak",  39, 119, fun = min) %>% 
 #'  ggsweeps() + 
 #'  ggtitle("Using add_cursor_point(..., fun=min) to find a minimum")
-add_cursor_point<-function(ephysdata, name, start, end,  fun, stream,  filter_fun=unfiltered, filter_fun2=unfiltered, 
+add_cursor_point<-function(ephysdata, name, start, end,  fun, stream, condition=TRUE,  filter_fun=unfiltered, filter_fun2=unfiltered, 
                            annot=annot_range_point(), ...){
-  add_cursor(ephysdata, name=name, start=start, end=end,  fun=fun, stream=stream, cfun= point_,  filter_fun={{filter_fun}}, filter_fun2={{filter_fun2}},annot=annot,...)
+  add_cursor(ephysdata, name=name, start={{start}}, end={{end}},  fun=fun, stream=stream, cfun= point_,  filter_fun={{filter_fun}}, filter_fun2={{filter_fun2}},annot=annot, condition={{condition}}, ...)
 }
 
 #' Find multiple points in cursor region

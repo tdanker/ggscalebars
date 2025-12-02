@@ -14,14 +14,19 @@ NULL
 #' @describeIn cursors
 #' general case for min, max, first, etc: whatever identifies a single data point
 #' @export
-point_<-function(data, fun, start, end, annot, ...){
- 
-  y=fun(data$y, ...)
-  x=data$x[which.min(abs(data$y-y))]
-  st=min(data$x)
-  en=max(data$x)
-  list(x=x, y=y, st=st, en=en, 
-       annotation=list(annot))
+point_<-function(data, fun, start, end, condition, annot, ...){
+ if(condition){
+   y=fun(data$y, ...)
+   x=data$x[which.min(abs(data$y-y))]
+   st=min(data$x)
+   en=max(data$x)
+   list(x=x, y=y, st=st, en=en, 
+        annotation=list(annot))
+ }else{
+   list(x=NA, y=NA, st=NA, en=NA, 
+        annotation=list(annot))
+ }
+  
   
 }
 attr(point_, "annot") <- point_.annot
