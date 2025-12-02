@@ -10,7 +10,9 @@ test_that("scalebars work on ggplot >3.5.0", {
       library(ggplot2, lib=".") #load ggplot 3.5.x
       library(patchwork)
       library(dplyr)
-      devtools::load_all(); (data.frame(x=(1:50)/10, y=(sin((1:50)/10)*15+15)) %>% ggplot(aes(x,y)) + geom_line() + geom_point(na.rm=T) ->p)+ scalebars()
+      #devtools::load_all(); 
+      
+      (data.frame(x=(1:50)/10, y=(sin((1:50)/10)*15+15)) %>% ggplot(aes(x,y)) + geom_line() + geom_point(na.rm=T) ->p)+ scalebars()
       
       p + scalebars(ybar.x = .1, ybar.y=.1, xbar.y=.1, xbar.x=.1, ylength = 3)  
       
