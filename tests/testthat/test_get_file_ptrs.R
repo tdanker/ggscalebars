@@ -1,6 +1,8 @@
 test_that("ptrs work from subdirs", {
   
-
+  # make sure that no data_files_path is set
+  options(data_files_path = NULL)
+  
   testdir <- withr::local_tempdir()
   withr::with_dir(testdir, {
     
@@ -38,7 +40,8 @@ test_that("ptrs work from subdirs", {
     }, "file was found in more than one place")
   })
   
-  
+  #cleanup after test
+  options(data_files_path = NULL)
   
 })
 
