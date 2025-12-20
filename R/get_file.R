@@ -25,7 +25,12 @@ get_file <- function(filename){
     mutate(path=path %>% paste0(filename)) %>% 
     mutate(found=file.exists(path)) %>% 
     filter(found)
-  if(NROW(found_paths)>1) warning("file was found in more than one place. Type '? set_file_searchfolder' to get help")
+  if(NROW(found_paths)>1) cli::cli_warn(c(
+    "file was found in more than one place: {found_paths}",
+    "you are currently in {getwd()}",
+    "your current search path is {getOption('data_files_path')}",
+    "Type '? set_file_searchfolder' to get help"))
+  
   if(NROW(found_paths)<1) stop(paste("could not find file. Type '? set_file_searchfolder' to get help", filename))
   found_paths %>%  head(1) %>% pull(path)
 }
