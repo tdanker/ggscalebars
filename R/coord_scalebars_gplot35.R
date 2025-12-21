@@ -19,12 +19,9 @@
 #' @param xlabel,ylabel manually override any scalebar label 
 #' @param xfactor,yfactor optional factor for the automatic generated labels
 #' @inheritParams ggplot2::coord_cartesian 
-
 #'
 #' @export
 #'
-#' @examples
-
 # a list of a coord_Cartesian and optionally the outer scalebars. 
 # As with the gg344 system, we add a Coord, which also draws the inner scalebars if requested
 # outer scalebars are added now via a "capped" scale_y_continuous, a new feature of the gg355 system 

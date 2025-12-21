@@ -53,8 +53,6 @@ amend_valve_contents<-function(df, valves, new_valve_contents){
 #'
 #' @return an annotated ggplot
 #' @export
-#'
-#' @examples
 annotate_applications<-function(p){
   
  get_applications(p)  -> B_

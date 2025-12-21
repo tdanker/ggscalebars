@@ -14,8 +14,6 @@
 #' @param filter_expr condition when the bar should be drawn; mostly used in conjunction with facetting. 
 #'
 #' @export
-#'
-#' @examples
 geom_topbar_<-function(
              start,
              end,
