@@ -43,13 +43,18 @@ mindestens eins von:
 Die Strategie Datenbank-Zugriff==>substanztabelle generieren lässt sich im Rahmen des commit-scripts automatisieren, das wäre eine gute Sache. 
 aber das ist evtl etwas entgegen das "die Mitarbeiter können alles selbst" Prinzip. 
 
-## recinfo, RNAinfo needs ephys3 and is slow (solved?) - hier gibt gerade mehrere Lösungen? 
+## recinfo, RNAinfo  - wie verwendet man das ? 
 ```{r}
-# With all RNA and other cool info
-get_recordinginfos(ephysdata::examplefile("OO_rpf")) %>% left_join(read_ROBOO(ephysdata::examplefile("OO_r2d")) ) %>% head(6) ->DATA 
 
-DATA %>% tidyr::unnest(Recinfo) %>% 
- ggsweeps(mapping=aes(x,y,color=rcinfo.Valve)) + facet_wrap(~WellID)
+get_recordinginfos(ephysdata::examplefile("OO_rpf")) -> RI
+
+names(RI)
+# With all RNA and other cool info
+get_recordinginfos(ephysdata::examplefile("OO_rpf")) %>% inner_join(read_ROBOO(ephysdata::examplefile("OO_r2d")) ) %>% head(6) ->DATA 
+
+DATA %>%  
+  tidyr::unnest(Recinfo) %>%
+ ggsweeps(mapping=aes(x,y,color=rcinfo.Valve)) + facet_wrap(~well)
 ```
 
 # caching and memoisation:
