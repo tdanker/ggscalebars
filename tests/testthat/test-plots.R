@@ -3,7 +3,7 @@ options("ephys4.cursor_annots_not_from_attr"=TRUE)
 
 test_that("we can do all Plots from Readme_more.Rmd", {
   suppressWarnings(library(vdiffr))
-  suppressWarnings(library(ephysdata))
+  #suppressWarnings(library(ephysdata))
   
   #xfun::proj_root()# proj
   

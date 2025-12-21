@@ -1,8 +1,8 @@
-library(stringr)
-library(readr)
-library(tidyr)
-library(dplyr)
-library(crayon)
+#library(stringr)
+#library(readr)
+#library(tidyr)
+#library(dplyr)
+#library(crayon)
 # ------- user level -------------
 
 get_applications_from_df<-function(df){
@@ -10,7 +10,7 @@ get_applications_from_df<-function(df){
     mutate(application=loglines %>% xtract_pattern(">>>(.*)", 2), .before=id)  %>%
     mutate(bars=list(loglines %>% xtract_pattern(">>>(.*)", which="all")), .before=id) %>%
     group_by(run) %>% calculate_offsets("realtime", 0) %>%
-    mutate(xend=lead(xoffset, default=Inf),.after=xoffset) %>% unnest(bars) %>%
+    mutate(xend=lead(xoffset, default=Inf),.after=xoffset) %>% tidyr::unnest(bars) %>%
     extract(bars, regex="([[:alnum:]]+)s: ([[:alnum:]]+) (.*)", into=c("opening_time","valve", "valve_content"),convert = T) %>%
     
     # we will allow a hastag on each valvecontent line. everything past the hashtag will be stripped off from valve content and placed in a seüarete "hastag" column. 
@@ -231,7 +231,7 @@ logs_per_sweep<-function(
 ){
   get_logs_per_run(plate) %>% 
     # count up oocytes:
-    group_by(run) %>% mutate(OO=str_detect(loglines, oo.pattern) %>% cumsum) -> df
+    group_by(run) %>% mutate(OO=stringr::str_detect(loglines, oo.pattern) %>% cumsum) -> df
   
   #set HDIFF automatically
   df[[1, "run_start"]] %>% as.character %>% as.POSIXct(tz = 'Europe/Berlin')->LOGDATE
@@ -252,7 +252,7 @@ logs_per_sweep<-function(
     #mutate(nLog=loglines %>% NROW ) %>%
     
     # nest loglines
-    group_by(run, OO) %>% nest(loglines=loglines) %>% 
+    group_by(run, OO) %>% tidyr::nest(loglines=loglines) %>% 
     filter(!is.na(OO)) %>%
     # fill up XX oocytes
     ungroup -> df 
@@ -260,11 +260,11 @@ logs_per_sweep<-function(
   df %>%   mutate(OO.=fill_wells(OO), .after=OO) %>% 
     
     # count up sweeps (aka recordings)
-    unnest(loglines) %>% 
+    tidyr::unnest(loglines) %>% 
     group_by(run, OO) %>%
-    mutate(swp=str_detect(loglines, recording.pattern) %>% cumsum) %>%
+    mutate(swp=stringr::str_detect(loglines, recording.pattern) %>% cumsum) %>%
     group_by(run, OO, swp) %>% 
-    nest(loglines=loglines) ->log
+    tidyr::nest(loglines=loglines) ->log
   
   
   run.given= !isFALSE(run)
@@ -279,7 +279,7 @@ logs_per_sweep<-function(
   }
   ###### why did we do it not here before? added this when working with "normal oocytes" and to avoid some errors, see ERROREPORT in LABREPORTS of the GABA-PRIOJECT MCSCIENCES.prj
   if(oo.given){
-    log %>% filter(OO %>% str_detect(.env$oo))->log
+    log %>% filter(OO %>% stringr::str_detect(.env$oo))->log
   }
   ##################################################
   
@@ -288,7 +288,7 @@ logs_per_sweep<-function(
   
   
   if(oo.given){
-    log %>% filter(OO. %>% str_detect(.env$oo))->log
+    log %>% filter(OO. %>% stringr::str_detect(.env$oo))->log
   } 
   
   log %>% select(-any_of("OO"), OO=OO.) %>% relocate(any_of(c("id", "plate")), run, swp, OO, loglines) 
@@ -318,7 +318,7 @@ logs_add_app.swp.n<-function(log,swp,n){
 logs_add_app.all<-function(log){
   log %>% group_by(run, OO, swp) %>% 
     mutate(app1 =list(loglines %>% xtract_pattern( ">>> (.*)\n", which ="all")), .before=loglines) %>% 
-    unnest(app1) %>%  
+    tidyr::unnest(app1) %>%  
     mutate(m=row_number()) %>% 
     pivot_wider(values_from = app1, names_from=m, names_prefix = "app.")
 }
@@ -342,11 +342,11 @@ get_oo_log_runs_df<- function(Plate,
   
   
   
-  plate_log<-read_lines(paste0(Plate, ".log"))
+  plate_log<-readr::read_lines(paste0(Plate, ".log"))
   
   
-  script_starts <- plate_log %>% str_which(">----- MessageLog start -----<")+1
-  script_ends   <- plate_log %>% str_which(">----- MessageLog end -----<")-1
+  script_starts <- plate_log %>% stringr::str_which(">----- MessageLog start -----<")+1
+  script_ends   <- plate_log %>% stringr::str_which(">----- MessageLog end -----<")-1
   
   
   if(missing(runs)){
@@ -539,7 +539,7 @@ colorize_word<-function(text, word, color){
 #' helper to extract parts from the loglines
 #' helper to extract parts from the loglines
 xtract_pattern<-function(loglines, p, which=1){
-  loglines %>% unlist %>% paste(collapse = "\n") %>% str_match_all( ., pattern = p) -> X
+  loglines %>% unlist %>% paste(collapse = "\n") %>% stringr::str_match_all( ., pattern = p) -> X
   #print(X)
   if(is.character(which) && which=="all"){
     # return all
@@ -588,7 +588,7 @@ get_streamed_cached<-function(plate, run, selection=TRUE, fifun=unfiltered, fifu
 
 #' @export
 print.roboolog<-function(x, .oo="(Recording oocyte in well.*\\n)", ...){
-  x <- unnest(x, loglines) 
+  x <- tidyr::unnest(x, loglines) 
   out= paste(x$loglines, collapse = "\n")
   out=out %>% str_replace_all("Script finished: OK", "")
   out=colorize_word(out, "(.*)", blue $ bold)

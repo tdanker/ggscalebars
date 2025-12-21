@@ -49,8 +49,8 @@ get_injection_info <-function(plate, well=NULL, ...){
 get_oo_log<- function(Plate, Well, filter=".*", end="Current clamp at 0 nA|Recording protocol completed|==> Date",...){
   plate_log<-read_lines(paste0(Plate, ".log"))
   
-  script_starts <- plate_log %>% str_which(">----- MessageLog start -----<")
-  script_ends   <- plate_log %>% str_which(">----- MessageLog end -----<")
+  script_starts <- plate_log %>% stringr::str_which(">----- MessageLog start -----<")
+  script_ends   <- plate_log %>% stringr::str_which(">----- MessageLog end -----<")
   stopifnot(length(script_ends)== length(script_starts))
   
   data.frame(start=script_starts, end_=script_ends) %>% pmap_dfr(function(start, end_){
@@ -58,13 +58,13 @@ get_oo_log<- function(Plate, Well, filter=".*", end="Current clamp at 0 nA|Recor
     Dates <- plate_log %>% str_subset("==> Date") %>% lubridate::ymd_hms()
     stopifnot(length(Dates)==2)
     Dates
-    oo_start <- plate_log %>% str_which(paste0("Recording oocyte in well: ", Well))
+    oo_start <- plate_log %>% stringr::str_which(paste0("Recording oocyte in well: ", Well))
     
     oo_start %>% map_dfr(function(oo_start){
       oo_log <- plate_log[c(oo_start:length(plate_log))]
-      oo_end<-  oo_log %>% str_which(end)
+      oo_end<-  oo_log %>% stringr::str_which(end)
       oo_log <- oo_log[1:oo_end[1]]
-      oo_log <- oo_log [str_which(oo_log, pattern=filter)]
+      oo_log <- oo_log [stringr::str_which(oo_log, pattern=filter)]
       Well <- oo_log[1] %>% str_split( pattern=":") %>% chuck(1,2) %>% str_trim()
       as_tibble( oo_log) %>% transmute(Plate=Plate, Well=Well, run=start, run_start=Dates[1], run_end=Dates[2], logstart=oo_start, logmessages=value)
     })

@@ -11,7 +11,7 @@ heka     <- read_PATCHMASTER( ephysdata::examplefile("NaV"), ser=2) %>% head(2)
 
 hama     <- read_HAMAMATSU(   ephysdata::examplefile("HT_cm")     ) %>% head(2)
 
-library(purrr)
+#library(purrr)
 
 
 # make sure that we do not get weird errors when using read_xxx function in notebooks:

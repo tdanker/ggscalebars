@@ -4,7 +4,7 @@
 test_that("logs_per_sweep works", {
   
   logs=logs_per_sweep(
-    ephysdata::examplefile("OO_r2d") %>% str_remove(".r2d"), add_r2d = FALSE, recording.pattern = "==="
+    ephysdata::examplefile("OO_r2d") %>% stringr::str_remove(".r2d"), add_r2d = FALSE, recording.pattern = "==="
     )
   expect_s3_class(logs, "tbl")
   expect_named(logs, c('plate', 'run', 'swp', 'OO', 'loglines', 'run_start', 'run_end'))

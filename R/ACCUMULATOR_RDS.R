@@ -105,7 +105,7 @@ check_in_oo <- function(., filename,...){
   } 
   
   
-  experiment <- .$data %>% attr("meta") %>%  select(id,  run, plate2=plate) %>% mutate( id= id %>% str_remove("-[0-9]*$")) %>% separate(id, into=c("plate", "oo"), sep = "-") %>% distinct
+  experiment <- .$data %>% attr("meta") %>%  select(id,  run, plate2=plate) %>% mutate( id= id %>% stringr::str_remove("-[0-9]*$")) %>% separate(id, into=c("plate", "oo"), sep = "-") %>% distinct
   
   listname <- experiment   %>% paste(collapse = "-")
   
@@ -131,7 +131,7 @@ check_out_oo <- function(., filename,...){
   } 
   
   
-  experiment <- .$data %>% attr("meta") %>%  select(id,  run, plate2=plate) %>% mutate( id= id %>% str_remove("-[0-9]*$")) %>% separate(id, into=c("plate", "oo"), sep = "-") %>% distinct
+  experiment <- .$data %>% attr("meta") %>%  select(id,  run, plate2=plate) %>% mutate( id= id %>% stringr::str_remove("-[0-9]*$")) %>% separate(id, into=c("plate", "oo"), sep = "-") %>% distinct
   
   listname <- experiment   %>% paste(collapse = "-")
   
