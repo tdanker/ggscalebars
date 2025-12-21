@@ -10,8 +10,5 @@ Meta
 docs
 /doc/
 /Meta/
-**/cache_HEKAtraces/*
-**/cache_robotraces/*
-**/cache_patchmaster/*
-**/cache/*
+tmp
 tests/testthat/Rplots.pdf

@@ -1,6 +1,7 @@
 get.ROBOOCYTE <- function(file, RecordingID, FPosRecordingData,  SampleRate, ch=2,start=0, end=NA, rerun=F,  ...) {
   trace_ = xfun::cache_rds(  # Todo: test if this caching is really a good thing. 
-    dir = getOption("cache_robotraces", default =here::here("tmp/cache_robotraces//")), rerun = rerun, 
+    dir = get_cachedir("cache_robotraces"),
+    rerun = rerun, 
     hash = list(file, RecordingID, FPosRecordingData,  SampleRate, ch,start, end), 
     clean = F,
     file="RTraw",
@@ -70,7 +71,8 @@ get_tracefile_locale <- function(file){
 # caching seems to work quite well
 get.ROBOOCYTE_ <- function(file, RecordingID, start=0, end=NA, rerun=F,  ...) {
   trace_ = xfun::cache_rds( # caching seems to work quite well
-    dir = getOption("cache_robotraces", default =here::here("tmp/cache_robotraces//")), rerun = rerun, 
+    dir = get_cachedir("cache_robotraces_"),
+    rerun = rerun, 
     hash = list(file, RecordingID, start, end), 
     clean = F,
     file="RTexp",
