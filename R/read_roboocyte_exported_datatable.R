@@ -38,7 +38,7 @@ read_ROBOO_exported_datatable <- function(plate_exportfile){
  
 #' Reformat output of read_Roboo
 #'
-#' @param ephysdata 
+#' @param ephysdata a tibble with ephys data
 #'
 
 #' @export

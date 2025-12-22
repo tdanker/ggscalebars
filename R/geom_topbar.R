@@ -1,9 +1,9 @@
 #' Title
 #'
-#' @param start 
-#' @param end 
-#' @param line 
-#' @param style 
+#' @param start start of the bar
+#' @param end end of the bar
+#' @param line line where the bar appears
+#' @param style a list of style parameters
 #' @param filter_expr condition when the bar should be drawn; mostly used in conjunction with facetting. 
 #'
 #' @export

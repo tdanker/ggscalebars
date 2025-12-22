@@ -53,7 +53,7 @@ drc_plan_HEKA<-function(ephysdata, n=3, conc=NA, cpd=NA){
   result
 }
 
-#' @param ephysdata 
+#' @param ephysdata a tibble with ephys data
 #'
 #' @param cpd a vector if the applied compounds
 #' @param conc a vector of same length of cpd, giving the concentrations

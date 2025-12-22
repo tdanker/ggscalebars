@@ -49,7 +49,7 @@ amend_valve_contents<-function(df, valves, new_valve_contents){
 #' this is only for Roboocyte and makes some assumptions on how we annotate the logs, as described in "get_logs_per_sweeps()". 
 #'
 #'
-#' @param p 
+#' @param p ggplot object from ggsweeps to annotate
 #'
 #' @return an annotated ggplot
 #' @export
@@ -156,12 +156,11 @@ annotate_df<-function(p, colors=c("red", "orange", "blue"), style=geom_topbars.d
 #' 
 #' may be deprecated soon. 
 #'
-#' @param p 
+#' @param p ggplot object from ggsweeps to annotate
 #'
 #' @param line 
 #' @param colors 
 #' @param style 
-#'
 #' @export
 annotate_valves<-function(p, line=4, colors=c("red", "orange", "blue"), style=geom_topbars.defaultstyle){
   

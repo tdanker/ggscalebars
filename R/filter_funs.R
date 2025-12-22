@@ -1,7 +1,9 @@
 #' a filter function that does nothing
 #'
+#' @param x input and output of the function.  
+#'
 #' @export
-unfiltered<-function(x)x
+unfiltered<-function(x){x}
 
 
 
