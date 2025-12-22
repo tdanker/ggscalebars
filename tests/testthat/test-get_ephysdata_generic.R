@@ -7,11 +7,24 @@ list.files("cache_robotraces/", full.names = T) %>% unlink
 robo.r2d <- read_ROBOO(       ephysdata::examplefile("OO_r2d")  ,get_exported_datatable = FALSE  )  %>% head(2)
 robo     <- read_ROBOO(       ephysdata::examplefile("OO_r2d")  ,get_exported_datatable = TRUE   )  %>% head(2)
 heka     <- read_PATCHMASTER( ephysdata::examplefile("NaV"), ser=2) %>% head(2)
-
-
 hama     <- read_HAMAMATSU(   ephysdata::examplefile("HT_cm")     ) %>% head(2)
 
-#library(purrr)
+
+
+test_that("check-ephysdata succeeds",{
+  expect_no_error(
+    robo.r2d %>% check_ephysdata()
+  )
+  expect_no_error(
+    robo     %>% check_ephysdata()
+  )
+  expect_no_error(
+    heka     %>% check_ephysdata()
+  )
+  expect_no_error(
+    hama     %>% check_ephysdata()
+  )
+})
 
 
 # make sure that we do not get weird errors when using read_xxx function in notebooks:
