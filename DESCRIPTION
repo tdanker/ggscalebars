@@ -30,7 +30,8 @@ Imports:
     gridBase, 
     scales, 
     xfun, 
-    yesno
+    yesno, 
+    here
 Suggests:
     knitr,
     testthat (>= 3.0.0),
