@@ -7,7 +7,8 @@ output: html_notebook
 - which is better, and why? 
 - do we need both and why ? 
    ==> bars where never really used
-   ==> topbars have no tests here
+   ==> topbars have no real usecase and tests in this package 
+         -- real usecases are outside in projects. 
    
 ## topbars vs topbars_
 - do they plot the same? 
@@ -17,11 +18,7 @@ output: html_notebook
    bars still depend on them - rewrite using gg335 like in topbars
 
 
-# DRINGED!  
 
-[x]( ***test on all platforms*** ) swp ist zwar gut dass es ein faktor ist, 
-   aber wenn über 9 dann kommt die Reihenfolge durcheinander. Also muss es ein besserer Faktor werden!
-   (habe alle swp und wellID in Faktoren basierend auf "numeric" umgewandelt - )
    
 
 
