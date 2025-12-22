@@ -244,7 +244,7 @@ geom_cursor_model_predict <- function(name, linewidth=2, ...){
         rowwise %>% mutate(pred=list(data.frame(.x=seq(st2,en2, length.out = 20)-x0, 
                                                 .y=pred_(model, st2-x0, en2-x0 )
         ))) %>%  tidyr::unnest(pred)%>% mutate(x=.x+xoffset+x0, y=.y+yoffset)
-      , linetype=5, ... ),
+      , linetype=5, na.rm=TRUE, ... ),
     geom_line( 
       data= .%>% get_data({{ name }})%>% 
         rowwise %>% mutate(pred=list(data.frame(
@@ -265,7 +265,7 @@ geom_cursor_model_predict <- function(name, linewidth=2, ...){
           ))) %>%  tidyr::unnest(pred)%>% mutate(
           x=.x+xoffset+x0,  
           y=.y+yoffset)
-      , linewidth=linewidth, ... )
+      , linewidth=linewidth, na.rm=TRUE, ... )
   )
 }
 
