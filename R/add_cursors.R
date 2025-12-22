@@ -148,7 +148,7 @@ add_cursor_point<-function(ephysdata, name, start, end,  fun, stream, condition=
 #' @param fun function that defines the cursor
 #' @export
 #' @examples 
-#' read_PATCHMASTER(examplefile("cardiopatch/21-07-Cardio.dat"), exp=23, ser=3,  trc="Vmon") %>% 
+#' read_PATCHMASTER(ephysdata_examplefile("cardiopatch/21-07-Cardio.dat"), exp=23, ser=3,  trc="Vmon") %>% 
 #'  add_cursor_points("starts", 10, 30, fun=max, direction = "above") -> points 
 #'  
 #'  # plot:
