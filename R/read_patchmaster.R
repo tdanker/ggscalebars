@@ -4,6 +4,7 @@
 #' @param exp optional, numeric or vector: select which experiments to read
 #' @param ser optional, numeric or vector: select which series to read
 #' @param swp optional, numeric or vector: select which sweeps to read
+#' @param cache_rerun if TRUE, cached data will be recalculated
 #' @param trc a string to be detected in the selected tracename, defaults to "Imon-1". If set to NA, all traces are returned
 #'
 #' @return a tibble with information about the file content, which can be further processed with e.g. ggsweeps
@@ -12,12 +13,8 @@
 #' @examples
 #'  library("ephysdata")
 #'  read_PATCHMASTER(ephysdata::examplefile("herg")) %>% filter(exp==1, ser==1, swp==1, trc=="Imon-1") %>% ggsweeps()
-read_PATCHMASTER<-function(file, exp=NA, ser=NA, swp=NA, trc="Imon-1|Imon1|I-mon", cache_rerun=F, 
-                           # option to return early to see how much performance the first step conumes (answer: ~50%) 
-                           step_out=99, 
-                           # we in-effectively filter only in the end. Thus, lets try an 
-                           # option to actually read only the specified experiment, to see the effect:  (works as expected)
-                           prefilter_exp_ser=F){
+read_PATCHMASTER<-function(file, exp=NA, ser=NA, swp=NA, trc="Imon-1|Imon1|I-mon", cache_rerun=F 
+                           ){
   xfun::cache_rds(  # this caching seems to make sense (confirmed by benchmarking)
     dir = get_cachedir("cache_patchmaster"),
     rerun = cache_rerun, 
@@ -32,8 +29,7 @@ read_PATCHMASTER<-function(file, exp=NA, ser=NA, swp=NA, trc="Imon-1|Imon1|I-mon
   class(ti)<-"list"
   con=file(file, "rb")
   
-  if(prefilter_exp_ser && !is.na(exp)) ti=prune_list_deep(ti,target_level=2, indices=exp)
-  if(prefilter_exp_ser && !is.na(ser)) ti=prune_list_deep(ti,target_level=3, indices=ser)
+  
   
   TABLE<-
     tibble(file=names(ti), exp=names(ti[[file]]))  %>% 
@@ -48,14 +44,14 @@ read_PATCHMASTER<-function(file, exp=NA, ser=NA, swp=NA, trc="Imon-1|Imon1|I-mon
       seconds=get_TraceTime(con, swp.)
     )
   
-  if(step_out==1) return(TABLE)
+  
   TABLE <- TABLE %>%
     rowwise %>% mutate(
       traceparams=list(get_trcparams(con, trc.)),
       exp_text=get_text(con, exp.),
       ser_text=get_text(con, ser.)
     ) %>% tidyr::unnest_wider(traceparams)
-  if(step_out==2) return(TABLE)
+  
   
   TABLE <- TABLE %>% 
   
