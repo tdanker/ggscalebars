@@ -1,19 +1,5 @@
-#' Cursors 
-#'
-#' mainly for internal use. 
-#' 
-#' @param data a tibble with ephys data
-#' @param start,end start and end of cursor range
-#' @param st2,en2 start and end of extended cursor range
-#' @param fun a function taking a vector and returning a summary value, like min, max or median
-#' @param model_fun a function representing a model, see \link{model_funs}
-#' @param th_fun function that defines a threshod for mulit-peaks
-#' @name cursors
-NULL
 
-#' @describeIn cursors
-#' general case for min, max, first, etc: whatever identifies a single data point
-#' @export
+
 point_<-function(data, fun, start, end, condition, annot, ...){
  if(condition){
    y=fun(data$y, ...)
@@ -32,10 +18,7 @@ point_<-function(data, fun, start, end, condition, annot, ...){
 attr(point_, "annot") <- point_.annot
 
 
-#' @describeIn cursors
-#' AP (cardiac). this improved version skips the first 50 samples after the maximum found so that "spikes" are excluded from 
-#' finding the maximum. It also has improved perfomance, because AP_ had some bugs. 
-#' @export
+
 AP2_<-function(data,  fun, start, end, annot=geom_cursor_AP_, ...){
   
   max_add=50 #this means that we skip thwe first 50 samples after the maximum when we determine the "range_post"
@@ -106,9 +89,7 @@ AP2_<-function(data,  fun, start, end, annot=geom_cursor_AP_, ...){
 attr(AP2_, "annot") <- geom_cursor_AP_
 
 
-#' @describeIn cursors
-#' AP (cardiac) (THIS VERSION IS SOFT-DEPRECATED). PLEASE USE AP2_. 
-#' @export
+
 AP_<-function(data, fun, start, end, annot=geom_cursor_AP_, ...){
    
   d = NULL
@@ -161,9 +142,7 @@ AP_<-function(data, fun, start, end, annot=geom_cursor_AP_, ...){
 attr(AP_, "annot") <- geom_cursor_AP_
 
 
-#' @describeIn cursors
-#' add a bar
-#' @export
+
 bar_<-function(data, start, end, line, fixed.y, sweeps, label,bar.mapping, fill, border, label.col, label.size, hjust, vjust, label.x, label.sweeps, annot=bar_.annot,...){
   
   st=start
@@ -177,9 +156,7 @@ bar_<-function(data, start, end, line, fixed.y, sweeps, label,bar.mapping, fill,
 }
 attr(bar_, "annot") <- bar_.annot
 
-#' @describeIn cursors
-#' general case for mean, median, etc: whatever identifies a level
-#' @export
+
 level_<-function(data,  fun, start, end, annot=level_.annot, ...){
   
   y=fun(data$y)
@@ -191,9 +168,7 @@ level_<-function(data,  fun, start, end, annot=level_.annot, ...){
 }
 attr(level_, "annot") <- level_.annot
 
-#' @describeIn cursors
-#' general case for models
-#' @export
+
 model_<-function(data,  model_fun, start, end, st2=start, en2=end, annot=model_.annot, x0=0,...){
   
   model_fun_ <- purrr::possibly(model_fun, list(e="no fit"))
@@ -212,9 +187,7 @@ attr(model_, "annot") <- model_.annot
 
 
 
-#' @describeIn cursors
-#' multiple peaks above a threshold
-#' @export
+
 peaks_multy_<-function(data, fun=max, start, end, th_fun=mean,  direction=c("above", "below"), min_chunksamples=1, start_plus=0, end_minus=0, annot=peaks_multy_.annot,...  ){
   
   th=th_fun(data$y)

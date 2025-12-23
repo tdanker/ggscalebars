@@ -4,11 +4,11 @@
 #' 
 #' This function is almost never used directly. 
 #' See [add_cursor_point] and friends on how to use more specific variants. 
-#'
+#' @keywords internal
 #' @param ephysdata a tibble with ephys data  
 #'
 #' @param name the name of the cursor
-#' @param cfun a cursor-type function, see \link{cursors}
+#' @param cfun a cursor-type function
 #' @param annot defines how the cursor is shown in \link{ggsweeps}. 
 #' @param ... aditional parameters passed to cfun
 #' @param start start value
@@ -138,7 +138,7 @@ add_cursor_point<-function(ephysdata, name, start, end,  fun, stream, condition=
 
 #' Find multiple points in cursor region
 #' 
-#' points cursor (multiple!). Calls \code{\link{peaks_multy_}} to cut its region into segments using a threshold function, 
+#' points cursor (multiple!). Cuts its region into segments using a threshold function, 
 #' and to apply the function \code{fun} to the segments above or below this threshold. This typically yields multiple results per cursor, 
 #' which can be conveniently further processed by another cursor when the long format is used. A typical example is the AP cursor.  
 #' 
