@@ -2,9 +2,14 @@
 #'
 #' 
 #' @param df data to be plotted, typically from get_PATCHMASTER
-#' @param start deprecated (was left limit of xrange)
-#' @param end   eprecated (was rigth value of xrange)
+#' @param start,end currently deprecated, could be used when automatically setting up a stream
+#' @param filter_fun,filter_fun2 used when automatically setting up a stream 
+#' @param maxpoints how many points to draw. speeds up plotting if set to low values
+#' @param style control appearance of bars (topspace etc) 
+#' @param xoffset ofsetting of traces on the x-axis. use "real", "none" for overlay, or numeric.  
+#' @param yoffset ofsetting of traces on the y-axis.  numeric.
 #' @param ... further arguments passed to geom_trace 
+#'
 #' @return a ggplot object
 #' @export
 #' 
@@ -12,20 +17,27 @@
 #'  library("ephysdata")
 #'  read_PATCHMASTER(ephysdata::examplefile("herg")) %>% filter(exp==1, ser==1, swp==1, trc=="Imon-1") %>% ggsweeps()
 #'  
-ggsweeps<-function(df,start=NA, end=NA, filter_fun=unfiltered, filter_fun2=unfiltered, maxpoints=1000,
-                   style             = ggsweeps.defaultstyle, 
-                   bottomspace       = style$bottomspace,
-                   topspace          = style$topspace, 
-                   height            = style$height, 
-                   space             = style$space, 
-                   bar.colors        = style$bar.colors,
-                   axis.bottom.style = style$axis.bottom.style, 
-                   axis.left.style   = style$axis.left.style,
+ggsweeps<-function(df,
+                   start=NA, #fixme make consistent to filter_fun (ditch or keep both )
+                   end=NA, 
+                   filter_fun=unfiltered, 
+                   filter_fun2=unfiltered, 
+                   maxpoints=1000,
+                   style             = ggsweeps.defaultstyle, #fixme make a styler-function
+                   
                    xoffset= c("none", "realtime"),
                    yoffset=0,
                   
                    
                    ...){
+  
+  bottomspace       = style$bottomspace
+  topspace          = style$topspace 
+  height            = style$height 
+  space             = style$space 
+  bar.colors        = style$bar.colors
+  axis.bottom.style = style$axis.bottom.style 
+  axis.left.style   = style$axis.left.style
   
   assertthat::assert_that(
     is.na(start), 
