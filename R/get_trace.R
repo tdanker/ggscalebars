@@ -6,6 +6,10 @@
 #' @param maxpoints optional reduce to this number of points
 #' @param filter_fun function to modify the y component of the trace data. Executed before cutting (except patchmaster, which reads partial), filter_fun2, and downsampling 
 #' @param filter_fun2 function to modify the complete trace data frame. Executed after cutting start to end.  
+#' @param unnest.data should the resulting columns stay unnested? defaults to TRUE
+#' @param name name of the stream to read from, if there are streams
+#' @param rerun only for patchmaster or roboocyte, rerun the cache
+#' @param ... unused
 #'
 #' @export
 get_trace<-function(df, 
@@ -15,7 +19,6 @@ get_trace<-function(df,
                            maxpoints=1e12, 
                            filter_fun=unfiltered, 
                            filter_fun2=unfiltered, 
-                           force_read=F, 
                            unnest.data=T, 
                            name=!!sym("data"),
                            

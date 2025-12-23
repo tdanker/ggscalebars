@@ -11,6 +11,7 @@
 #' It is mandatory that at least axis.line is set in the theme. 
 #' \link{theme_scalebars} offers a convenient way to tweak the appearance of the scalebars.
 #' \link{scalebars} provides a conveniant wrapper funtion that applies the theme automatically. 
+#' 
 #'
 #' @param x,y set position of both scalebars, in npc coordinates (0 = bottom|left, 1 = top|right).  
 #' @param xbar.x,xbar.y,ybar.x,ybar.y optionally, set position for a scalebar individually 
@@ -18,13 +19,13 @@
 #' @param xunit,yunit optionally add a unit to a scalebar label
 #' @param xlabel,ylabel manually override any scalebar label 
 #' @param xfactor,yfactor optional factor for the automatic generated labels
-#' @inheritParams ggplot2::coord_cartesian 
+#' @param xlim,ylim limits
+#' @param expand.x,expand.y expansion factor for the axes
+#' @param expand axis expansion on/off
+#' @param clip clipping on/off
+#' @param top,left,bottom,right control which axes or bars a drawn. Set to "bar" to draw a scalebar. otherwise, it is the cap parameter of guide_axis.  
 #'
 #' @export
-#'
-# a list of a coord_Cartesian and optionally the outer scalebars. 
-# As with the gg344 system, we add a Coord, which also draws the inner scalebars if requested
-# outer scalebars are added now via a "capped" scale_y_continuous, a new feature of the gg355 system 
 coord_scalebars <- function (
   x=0,y=0,
   xbar.x=x, xbar.y=y,    
@@ -40,8 +41,8 @@ coord_scalebars <- function (
   top = waiver(), 
   left = "bar", 
   bottom = "bar", 
-  right = waiver(), 
-  gap = 0.01) 
+  right = waiver() 
+  ) 
 {
   
   # provide an easy option to switch off x or y bar entirely: 

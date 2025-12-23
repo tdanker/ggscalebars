@@ -1,7 +1,9 @@
 #' Cursor annotations 
 #'
-#' geoms which help to visualise curso results in a ggsweeps plot. 
-#' 
+#' geoms which help to visualise cursor results in a ggsweeps plot. 
+#' @param color,range.color,point.color,point.shape,point.fill,point.size,point.stroke,range.fill,line.color,line.width,name,fill,col,linetype,filter,linewidth style parameters
+#' @param ... arguments passed to geoms
+#' @param x1,x2,toplevel totslly mysterious params :-)
 #' @name cursorannotations
 NULL
 

@@ -14,6 +14,11 @@
 #' @param confidence  set to true to plot the confidence interval as a ribbon. 
 #' @param confidence.alpha  the alpha value of the confidence ribbon 
 #' @param ...         arguments are forwarded to geoms
+#' @param point.size,line.size,bar.size style parameters 
+#' @param show_IC50 if TRUE, the IC50 values will be shown in the legend
+#' @param legend.labels optional, labels for the legends
+#' @param drop_conc0 if TRUE (the default), no data point will be shown for the control condition ("0mM compound") 
+#' @param colors optional, the colors to be used fot the curves
 #'
 #' @family drc methods
 #'
