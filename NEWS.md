@@ -1,3 +1,14 @@
+# ephys4 4.0.2
+
+This release mainly fixes tests and documentation issues. 
+
+### improvements: 
+- geom_topbar can now draw lines to the data. 
+
+### removed functions:
+- everything related to reading roboocyte logs in a project specifix way. This will go to another package. 
+- all 'accumulator' functions: - we will use the 'targets' library from now on. 
+
 # ephys4 4.0.1
 
 ### new features:
