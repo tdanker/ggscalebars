@@ -1,4 +1,4 @@
-#' Title
+#' Read Roboocyte files
 #'
 #' @param plate Roboocyte plate name
 #' @param get_RNAinfo Boolean, if TRUE, try to read the RNA info from *.rpf file
