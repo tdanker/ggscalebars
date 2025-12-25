@@ -9,8 +9,8 @@
 #' @export
 #'
 #' @examples
-#' a<-read_PATCHMASTER("VG_Blocker.dat", exp = 1, ser = 2) %>% filter(swp==6) %>% add_stream
-#' b<-read_PATCHMASTER("VG_Blocker.dat", exp = 1, ser = 2) %>% filter(swp==12)%>% add_stream
+#' a<-read_PATCHMASTER("VG_Blocker.dat", exp = 1, ser = 2) %>% filter(swp==6) %>% add_trace
+#' b<-read_PATCHMASTER("VG_Blocker.dat", exp = 1, ser = 2) %>% filter(swp==12)%>% add_trace
 #' subtract_traces(b,a) ->x 
 #' x %>% ggsweeps() + ggtitle("b -a")
 #' bind_rows(a,b, x) %>% ggsweeps(mapping=aes(col=swp)) 

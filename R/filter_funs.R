@@ -16,7 +16,7 @@ unfiltered<-function(x){x}
 #' @param p1 first anchor, also called "baseline", 
 #' @param p2 second anchor, also called "drift"
 #' 
-#' @return a function that can be used as a filter in \link{add_stream}
+#' @return a function that can be used as a filter in \link{add_trace}
 #' @export
 #'
 createFilter_driftcorrection<-function(p1, p2){

@@ -580,7 +580,7 @@ get_streamed_cached<-function(plate, run, selection=TRUE, fifun=unfiltered, fifu
                     annotated_sweeps[selection,] %>% 
                       group_by(well) %>% 
                       calculate_offsets("realtime", 0) %>%  
-                      add_stream(filter_fun=fifun, filter_fun2=fifun2, maxpoints=300) 
+                      add_trace(filter_fun=fifun, filter_fun2=fifun2, maxpoints=300) 
                     
                   })
 }

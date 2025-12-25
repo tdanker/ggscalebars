@@ -6,7 +6,7 @@ test_that("scalebars auto-length work even when data range is very small", {
   
   # generate example data with very small data range in both x and y axes
   NaIV_1 <- read_PATCHMASTER(ephysdata::examplefile("NaV")) %>% 
-    filter(exp==1, ser==2)  %>%  add_stream(filter_fun = \(y)y/1000)
+    filter(exp==1, ser==2)  %>%  add_trace(filter_fun = \(y)y/1000)
   
   # inner bars:
   vdiffr::expect_doppelganger("inner bars1", {

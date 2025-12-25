@@ -42,16 +42,16 @@
 #' @param check_name (internal)
 #'
 #' @export
-#' @describeIn add_stream_ add a stream "wide" variant
-add_stream_ <- function(df, name="default", start=0, end=NA, maxpoints=1e9, filter_fun=unfiltered, filter_fun2=unfiltered, check_name=T){
+#' @describeIn add_trace_ add a stream "wide" variant
+add_trace_ <- function(df, name="default", start=0, end=NA, maxpoints=1e9, filter_fun=unfiltered, filter_fun2=unfiltered, check_name=T){
   
   if(check_name && stringr::str_ends({{name}}, ".str")) 
-    warning("name of stream should not end with str when using add_stream_. Use add_stream (without the underscore) instead")
+    warning("name of stream should not end with str when using add_trace_. Use add_trace (without the underscore) instead")
   
   xplain_name<- if(missing(name)) "(the default)" else ""
   
   if({{name}} %in% names(df))
-    stop(glue::glue("this is add_stream_, while trying to add a stream with name {{{name}}} {xplain_name}: a column with the name {{{name}}} is already present in your data set - this would override existing data. ")  )
+    stop(glue::glue("this is add_trace_, while trying to add a stream with name {{{name}}} {xplain_name}: a column with the name {{{name}}} is already present in your data set - this would override existing data. ")  )
   
   get_trace(df, 
             
@@ -63,9 +63,9 @@ add_stream_ <- function(df, name="default", start=0, end=NA, maxpoints=1e9, filt
 
 
 
-#' @describeIn add_stream_ add a stream "long" variant
+#' @describeIn add_trace_ add a stream "long" variant
 #' @export 
-add_stream <- function(df, name="default", start=0, end=NA, maxpoints=1e9, filter_fun=unfiltered, filter_fun2=unfiltered, check_name=F){
+add_trace <- function(df, name="default", start=0, end=NA, maxpoints=1e9, filter_fun=unfiltered, filter_fun2=unfiltered, check_name=F){
   
   # if the user not already did it, we add .str to the name, which signals pivot_longer_streams that it should be included in the pivoted set of streams. 
   if(!stringr::str_ends(name, ".str")) name=paste0(name, ".str")
@@ -78,7 +78,7 @@ add_stream <- function(df, name="default", start=0, end=NA, maxpoints=1e9, filte
   df <-
    df %>% 
     tibble::rowid_to_column() %>% 
-    add_stream_({{name}}, start=start, end=end, maxpoints=maxpoints, filter_fun=filter_fun, filter_fun2 = filter_fun2, check_name = check_name) %>% 
+    add_trace_({{name}}, start=start, end=end, maxpoints=maxpoints, filter_fun=filter_fun, filter_fun2 = filter_fun2, check_name = check_name) %>% 
     pivot_longer_streams() %>% 
     arrange(rowid) %>% select(-rowid) 
   
@@ -93,7 +93,7 @@ add_stream <- function(df, name="default", start=0, end=NA, maxpoints=1e9, filte
 }
 
 
-# helper functions used by add_stream
+# helper functions used by add_trace
 pivot_longer_streams <- 
   . %>% tidyr::pivot_longer(cols=c(any_of("data"), ends_with(".str")), names_to="stream", values_to = "data", names_pattern = "(.*)\\.str")
 

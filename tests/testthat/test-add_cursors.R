@@ -26,8 +26,8 @@ test_that("we can use streams with cursors",{
   # here, we create a custom stream and then use it with the cursor. 
   expect_no_error({
     heka      %>% slice(c(4,6)) %>%
-      add_stream_("mystream",  filter_fun = bf0.2) %>% 
-      add_stream_("unfiltered") %>% 
+      add_trace_("mystream",  filter_fun = bf0.2) %>% 
+      add_trace_("unfiltered") %>% 
       add_cursor(name = "peak_unfiltered",start=0.007, end=0.02,cfun = point_, fun=min, stream = unfiltered) %>%
       add_cursor(name = "peak",start=0.007, end=0.02,cfun = point_, fun=min, stream = mystream) %>% 
       ggplot(aes(x,y, group=id)) + 
@@ -41,8 +41,8 @@ test_that("we can use streams with cursors",{
   expect_no_error({
     heka      %>% slice(c(4,6)) %>%
       
-      add_stream("unfiltered") %>% 
-      add_stream("mystream",  filter_fun = bf0.2) %>% 
+      add_trace("unfiltered") %>% 
+      add_trace("mystream",  filter_fun = bf0.2) %>% 
       mutate(stream=factor(stream, levels=c( "unfiltered","mystream") )) %>%
       
       add_cursor(name = "peak",start=0.007, end=0.02,cfun = point_, fun=min, stream = data) %>% 
@@ -67,13 +67,13 @@ test_that("cursor annots look the same, coming from attribute or cursor resultli
       library(patchwork)
       options("ephys4.cursor_annots_not_from_attr"=FALSE)
       heka      %>% 
-        add_stream %>% 
+        add_trace %>% 
         add_cursor_point("peak", 0.01, 0.012, min) %>% ggsweeps() -> p1
       
       
       options("ephys4.cursor_annots_not_from_attr"=TRUE)
       heka      %>% 
-        add_stream %>% 
+        add_trace %>% 
         add_cursor_point("peak", 0.01, 0.012, min) %>% ggsweeps() -> p2
       print(p1 + p2)
       
@@ -89,13 +89,13 @@ test_that("cursor annots look the same, coming from attribute or cursor resultli
       library(patchwork)
       options("ephys4.cursor_annots_not_from_attr"=FALSE)
       heka      %>% 
-        add_stream %>% 
+        add_trace %>% 
         add_cursor("peak", 0.01, 0.012, point_,fun=min) %>% ggsweeps() -> p1
       
       
       options("ephys4.cursor_annots_not_from_attr"=TRUE)
       heka      %>% 
-        add_stream %>% 
+        add_trace %>% 
         add_cursor("peak", 0.01, 0.012, point_,fun=min) %>% ggsweeps() -> p2
       print(p1 + p2)
       
@@ -133,7 +133,7 @@ test_that("if we add stream before using cursors, everything is ok ", {
     
     
     heka      %>% 
-      add_stream %>% 
+      add_trace %>% 
       add_cursor_point("peak", 0.01, 0.012, min) %>% ggsweeps()
   ) 
   
@@ -186,14 +186,14 @@ test_that("advanced cursor_points works without error", {
 #   expect_true(
 #     heka      %>% head(2) %>% add_cursor_point("peak", 0.02, 0.22, csr_fun) %>%  get_trace %>%
 #       .$peak.csr %>% attributes %>% names =="annot"
-#     #heka      %>% head(2) %>% add_cursor_point("peak", 0.02, 0.22, csr_fun) %>% add_stream() %>%  .$peak.csr %>% attributes %>% names =="annot"
+#     #heka      %>% head(2) %>% add_cursor_point("peak", 0.02, 0.22, csr_fun) %>% add_trace() %>%  .$peak.csr %>% attributes %>% names =="annot"
 #   )
 # })
 
 
 
 # cursor_bar_heka <-
-#   heka %>%  head(3) %>% add_stream() %>%
+#   heka %>%  head(3) %>% add_trace() %>%
 #   add_bar(name = "barx", start=0.01,end=0.03) %>%
 #   add_cursor_point("peak", 0.01,0.012,min) %>% 
 #   add_cursor_level("lvl", 0.01,0.012,min ) 

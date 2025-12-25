@@ -71,7 +71,7 @@ ggsweeps<-function(df,
       
       if(! "data" %in% names(df)) {
         warning("adding a stream in ggsweeps - consider adding earlier!")
-        df %>% add_stream(start=start, end=end, filter_fun=filter_fun, filter_fun2=filter_fun2, maxpoints=maxpoints) -> df
+        df %>% add_trace(start=start, end=end, filter_fun=filter_fun, filter_fun2=filter_fun2, maxpoints=maxpoints) -> df
         
         }
       
