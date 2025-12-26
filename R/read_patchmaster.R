@@ -171,3 +171,60 @@ prune_list_deep <- function(x, indices, current_level = 1, target_level = 2) {
   }
 }
 
+
+
+#' @exportS3Method get_traces_of_file ptrs_heka
+#' @keywords internal
+get_traces_of_file.ptrs_heka <- function(df, name, rerun=TRUE){
+  
+  df<-
+    df %>% 
+    mutate({{name}}:=  df$ptrs %>% 
+             purrr::map( \(ptr){
+               
+               get.Patchmaster_noCache( 
+                 ptr$file, 
+                 ptr$trc., 
+                 ptr$swp.) %>% 
+                 select(x,y,TraceTime)
+               
+             }) 
+    )
+  
+  
+}
+
+
+
+
+# version that does no caching (very fast)
+# caching turned out to be not useful for patchmaster traces
+get.Patchmaster_noCache<-function(file, trc., swp., start=0, end=NA, y_only=F,  ...){
+  file=get_file(file)
+  con=file(file, "rb")
+  seek(con, trc. + 104)
+  Xinterval <- readBin(con, "double", size = 8)
+  start= floor(start/Xinterval)
+  if(!is.na(end)){
+    end= ceiling(end/Xinterval)
+    n=end-start  
+  }else{
+    n=NA
+  }
+  
+  y <- getTrace_(con=con, ptr=trc., start = start, n=n)
+  nDatapoints<- attr(y, "nDatapoints_")
+  TraceTime=readAny(swp., con, 56,"double",8)
+  
+  x <- (start+(1:length(y))) * Xinterval
+  
+  close(con)
+  if(y_only) return( y)
+  
+  data.frame(y=y, x=x, TraceTime=TraceTime) 
+  
+}
+
+
+
+

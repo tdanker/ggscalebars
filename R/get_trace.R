@@ -26,21 +26,13 @@ get_trace<-function(df,
                     ...){
   
   end=n
-  # HAMAMATZU
-  if(all(df$ptrs %>% purrr::map_lgl(inherits,"ptrs_HAMA"))){
-    
-    filename <- df$ptrs %>% purrr::map_chr("file") %>% unique
-    wells=unique(df$well)
-    
-    df <- full_join(df,  read_HAMAMATSU_traces(filename, wells, tracedata_to = {{name}}) , by="well") 
-    
-  }else{
-    # Patchmaster or Roboocyte
-    df <- df %>% mutate({{name}}:=  df$ptrs %>% purrr::map(\(ptr){get.ephysdata_fast(ptr, rerun=rerun)}) )
-  } 
   
+ 
   
-  #return(df %>% unnest(data))
+  df <- get_traces_per_file(df, {{name}})
+ 
+  
+ 
   df <- df %>% tidyr::unnest({{name}}) 
   if(is.na(end)) end=max(df$x)
   if(is.na(start)) start=min(df$x)
@@ -63,6 +55,73 @@ get_trace<-function(df,
 
 
 
+get_traces_per_file<-function(df, name){
+  
+  df %>% 
+    
+    # prepare for the split: add file column
+    mutate(ptrs.file=purrr::map_chr(ptrs,"file")) %>% 
+    
+    #group-split by file
+    group_by(file) %>% group_split()  %>% 
+    
+    # add the ptrs class to each list element
+    purrr::map(add_ptrs_class_to_df) %>%
+    
+    # call apropriate S3 method
+    purrr::map(get_traces_of_file, name={{name}}) %>% 
+    
+    # remove ptrs class again
+    purrr::map(remove_ptrs_class) %>% 
+    
+    # re-combine split
+    purrr::list_rbind() %>% 
+    
+    # remove file column 
+    select(-ptrs.file)
+  
+}
+
+
+#' Internal helper
+#'
+#' @param df internal use
+#' @param name  internal use 
+#' @param rerun internal use
+#'
+#' @description
+#' This function is exported for technical reasons but is not
+#' intended for direct user use.
+#'
+#' @keywords internal
+#' @export
+get_traces_of_file <- function(df, name, rerun=TRUE) {
+  UseMethod("get_traces_of_file")
+}
+
+
+
+# helper functions:
+# add to df the class of the first element in column ptrs 
+add_ptrs_class_to_df<-function(df){
+  ptrs_class <- class(df$ptrs[[1]])[1]
+  class(df)<-c(ptrs_class, class(df))
+  df
+}
+
+# remove what we have added with add_ptrs_class
+remove_ptrs_class<-function(df){
+  class(df)<-class(df)[-1]
+  df
+}
+
+
+
+# helper function used by read.xxx functions to set the class of the ptrs
+add_ptrs_class <- function(., ptrs_class){ mutate(., ptrs = purrr::map(ptrs, add_class, ptrs_class))}
+
+# padavan
+add_class<-function(x,newclass){class(x)<-c(newclass,class(x));x}
 
 
 
