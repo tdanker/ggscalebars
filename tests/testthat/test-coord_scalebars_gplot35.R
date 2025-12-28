@@ -1,11 +1,11 @@
 test_that("scalebars auto-length work even when data range is very small", {
-  
+  library(ephys4mini)
   # we usually do not have a problem with small data ranges as long as we set xlength and ylength manually. 
   # here, auto-calculation of xlength and ylength is tested for this case
   
   
   # generate example data with very small data range in both x and y axes
-  NaIV_1 <- read_PATCHMASTER(ephysdata::examplefile("NaV")) %>% 
+  NaIV_1 <- ephys4Patchmaster::read_PATCHMASTER(ephysdata::examplefile("NaV")) %>% 
     filter(exp==1, ser==2)  %>%  add_trace(filter_fun = \(y)y/1000)
   
   # inner bars:

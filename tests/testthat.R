@@ -1,6 +1,6 @@
 library(testthat)
-library(ephys4)
+library(scalebars)
 options(bitmapType = "cairo")
 #Sys.setlocale("LC_ALL", "C")  # Or set to a known locale
 
-test_check("ephys4")
+test_check("scalebars")

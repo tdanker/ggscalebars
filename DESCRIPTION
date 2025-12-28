@@ -1,4 +1,4 @@
-Package: ephys4
+Package: scalebars
 Type: Package
 Title: Read, analyze and plot HEKA Patchmaster files
 Version: 4.0.1
