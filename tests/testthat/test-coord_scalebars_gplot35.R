@@ -1,5 +1,5 @@
 test_that("scalebars auto-length work even when data range is very small", {
-  library(ephys4mini)
+  library(ephys4mini) #fixme this "suggests" dependency has to go away - use generic testdata!
   # we usually do not have a problem with small data ranges as long as we set xlength and ylength manually. 
   # here, auto-calculation of xlength and ylength is tested for this case
   

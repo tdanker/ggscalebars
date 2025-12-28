@@ -10,28 +10,8 @@ Description: Patchmaster raw data files can be read directly and visualized usin
  which are user defined regions of interest on which calculations are performed. 
 License: GPL
 Imports:
-    tidyr,
-    purrr,
     stringr,
-    rlang,
-    lubridate,
-    xml2,
-    XML,
-    readr,
-    assertthat,
-    drc,
-    modelr,
-    signal,
-    tibble,
-    glue, 
-    units,
-    lifecycle,
-    cli, 
-    gridBase, 
-    scales, 
-    xfun, 
-    yesno, 
-    here
+    rlang
 Suggests:
     knitr,
     testthat (>= 3.0.0),
@@ -42,7 +22,9 @@ Suggests:
     devtools,
     fs,
     vdiffr,
-    withr
+    withr, 
+    ephys4mini, 
+    ephys4Patchmaster 
 Depends: R (>= 4.2), dplyr, ggplot2 (>= 3.5.1)
 VignetteBuilder: knitr
 RoxygenNote: 7.3.3
