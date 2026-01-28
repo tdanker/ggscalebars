@@ -1,7 +1,7 @@
 Package: scalebars
 Type: Package
 Title: Read, analyze and plot HEKA Patchmaster files
-Version: 4.0.1
+Version: 4.0.2
 Date: 2025-12-03
 Author: Timm Danker
 Maintainer: Timm Danker <timm.danker@nmi.de>

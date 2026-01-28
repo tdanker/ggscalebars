@@ -11,7 +11,7 @@
 theme_scalebars<-function(size=12,
                          lwd=1.2,
                          xlab.pos=c("bottom", "top"),
-                         ylab.pos=c("left", "right")
+                         ylab.pos=c("left", "right"), base_theme=theme_bw
 )
 {
 
@@ -26,7 +26,7 @@ theme_scalebars<-function(size=12,
   if(ylab.pos=="right")
     y.vjust=-6
 
-  theme_bw() +
+  
     theme(panel.border=element_blank(),
           axis.line=element_line(linewidth=lwd, lineend = "square"),
           #axis.ticks = element_blank(),
