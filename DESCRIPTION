@@ -23,7 +23,7 @@ Suggests:
     fs,
     vdiffr,
     withr, 
-    ephys4mini, 
+    ephys4R, 
     ephys4Patchmaster 
 Depends: R (>= 4.2), dplyr, ggplot2 (>= 3.5.1)
 VignetteBuilder: knitr
