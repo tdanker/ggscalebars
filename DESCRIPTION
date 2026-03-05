@@ -1,13 +1,12 @@
 Package: scalebars
 Type: Package
-Title: Read, analyze and plot HEKA Patchmaster files
+Title: Scalebars for ggplot
 Version: 4.0.2
 Date: 2025-12-03
 Author: Timm Danker
 Maintainer: Timm Danker <timm.danker@nmi.de>
-Description: Patchmaster raw data files can be read directly and visualized using ggplot.  
- The package also allows for setting of so called 'cursors', 
- which are user defined regions of interest on which calculations are performed. 
+Description: Scalebars are commonly used as alternatives to classical axes. 
+   This package provides scalebars for ggplot. 
 License: GPL
 Imports:
     stringr,
