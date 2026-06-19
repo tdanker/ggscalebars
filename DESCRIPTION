@@ -1,4 +1,4 @@
-Package: scalebars
+Package: ggscalebars
 Type: Package
 Title: Scalebars for ggplot
 Version: 4.0.2
