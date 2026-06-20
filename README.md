@@ -18,30 +18,17 @@ remotes::install_github("NMIephys/ggscalebars")
 ```
 
 ``` r
-# read and plot HEKA patch-clamp file
-library(ephys4Patchmaster)
-```
+x=seq(-10,10, length.out=100)
+testdata <- data.frame(x=x/10, y=dnorm(x))
+p<- ggplot(testdata, aes(x,y)) + geom_line()
 
-    ## Lade nötiges Paket: ephys4R
-
-    ## Lade nötiges Paket: scalebars
-
-    ## 
-    ## Attache Paket: 'scalebars'
-
-    ## Die folgenden Objekte sind maskiert von 'package:ggscalebars':
-    ## 
-    ##     coord_scalebars, scalebars, theme_scalebar_h, theme_scalebar_v,
-    ##     theme_scalebars
-
-``` r
-herg.plot <- (
-  read_PATCHMASTER(ephysdata::examplefile("herg"), exp = 1, ser = 1) %>% 
-             ggsweeps() )
-
-herg.plot 
+p
 ```
 
 ![](man/figures/readme_plot-1.png)<!-- -->
+
+``` r
+p + scalebars(ylength=.1)
+```
 
 ![](man/figures/drc-1.png)<!-- -->

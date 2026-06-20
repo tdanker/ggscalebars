@@ -15,18 +15,13 @@ Suggests:
     knitr,
     testthat (>= 3.0.0),
     rmarkdown,
-    ephysdata, 
-    patchwork,
-    cowplot, 
     devtools,
     fs,
     vdiffr,
-    withr, 
-    ephys4R, 
-    ephys4Patchmaster 
+    withr
 Depends: R (>= 4.2), dplyr, ggplot2 (>= 3.5.1)
 VignetteBuilder: knitr
-RoxygenNote: 7.3.3
 Encoding: UTF-8
 Config/testthat/edition: 3
 Roxygen: list(markdown = TRUE)
+Config/roxygen2/version: 8.0.0

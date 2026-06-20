@@ -16,15 +16,12 @@ Scalebars are commonly used as alternatives to classical axes.
 lifecycle::badge("stable")
 devtools::load_all()
 
-theme_set(cowplot::theme_cowplot())
-
 knitr::opts_chunk$set(
   fig.path = "man/figures/", 
   fig.width = 9
 )
 
-options(data_files_path = ephysdata::get_examples_path())
-library(patchwork)
+
 ```
 
 ### Package Installation
@@ -36,19 +33,17 @@ remotes::install_github("NMIephys/ggscalebars")
 
 
 ```{r readme_plot}
-# read and plot HEKA patch-clamp file
-library(ephys4Patchmaster)
-herg.plot <- (
-  read_PATCHMASTER(ephysdata::examplefile("herg"), exp = 1, ser = 1) %>% 
-             ggsweeps() )
+x=seq(-10,10, length.out=100)
+testdata <- data.frame(x=x/10, y=dnorm(x))
+p<- ggplot(testdata, aes(x,y)) + geom_line()
 
-herg.plot 
+p
 ```
 
 
 
-```{r drc, echo=FALSE, warning=FALSE, fig.width=12, fig.height=8}
-herg.plot + scalebars(xunit="sec", yunit="nA")
+```{r drc}
+p + scalebars(ylength=.1)
 ```
 
 

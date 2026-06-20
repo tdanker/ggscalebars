@@ -8,7 +8,6 @@ test_that("scalebars work on ggplot >3.5.0", {
       
       # install.packages("ggplot2", lib=".")
       library(ggplot2, lib=".") #load ggplot 3.5.x
-      library(patchwork)
       library(dplyr)
       #devtools::load_all(); 
       
@@ -18,11 +17,7 @@ test_that("scalebars work on ggplot >3.5.0", {
       
       p + scalebars(xunit="m")
       
-      p + 
-        geom_topbar(0.1,1, line=1,label = "just", border="white" )+ 
-        geom_topbar(1,3, line=2,label = "test", border="white")+ 
-        geom_topbar(3,4, line=3, label="the best", border="white")+ 
-        scalebars(xunit="m")
+     
       
       
       

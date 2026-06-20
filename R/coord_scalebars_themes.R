@@ -11,7 +11,7 @@
 theme_scalebars<-function(size=12,
                          lwd=1.2,
                          xlab.pos=c("bottom", "top"),
-                         ylab.pos=c("left", "right"), base_theme=theme_bw
+                         ylab.pos=c("left", "right")
 )
 {
 
